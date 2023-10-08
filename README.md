@@ -30,4 +30,4 @@ Don't miss our project on Robust Approach to Detect Spontaneous Micro Expression
 
 Join us at the NASA Space Apps Challenge 2023 and be a part of groundbreaking projects that are shaping the future of technology and innovation. Expand your horizons and make a difference in these fascinating domains!
 
-SCHEDULE
+SCHEDULE: October 7-8, 2023
