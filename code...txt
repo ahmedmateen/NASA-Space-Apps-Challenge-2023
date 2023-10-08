@@ -1,0 +1,93 @@
+# Import necessary libraries
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# Define the dimensions of your input images (assuming MNIST dataset)
+image_height = 28
+image_width = 28
+num_channels = 1
+
+# Step 1: Load the dataset (MNIST dataset)
+train_data_path = '/content/sample_data/mnist_train_small.csv'
+test_data_path = '/content/sample_data/mnist_test.csv'
+
+# Load training data
+train_df = pd.read_csv(train_data_path)
+X_train = train_df.iloc[:, 1:].values
+y_train = train_df.iloc[:, 0].values
+
+# Load test data
+test_df = pd.read_csv(test_data_path)
+X_test = test_df.iloc[:, 1:].values
+y_test = test_df.iloc[:, 0].values
+
+# Normalize pixel values (0-255) to a range of 0-1
+X_train = X_train / 255.0
+X_test = X_test / 255.0
+
+# Reshape the data to the desired input shape
+X_train = X_train.reshape(-1, image_height, image_width, num_channels)
+X_test = X_test.reshape(-1, image_height, image_width, num_channels)
+
+# Step 2: Data Splitting (Train/Test Split)
+X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
+
+# Rest of the code remains the same
+# Define the dimensions of your input images (assuming MNIST dataset)
+image_height = 28
+image_width = 28
+num_channels = 1
+
+# Rest of the code from the previous snippet
+
+# Step 3: Model Definition
+model = keras.Sequential([
+    # Convolutional layers
+    layers.Conv2D(32, (3, 3), activation='relu', input_shape=(image_height, image_width, num_channels)),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation='relu'),
+    layers.MaxPooling2D((2, 2)),
+
+    # Flatten layer
+    layers.Flatten(),
+
+    # Fully connected layers
+    layers.Dense(128, activation='relu'),
+    layers.Dropout(0.5),
+    layers.Dense(10, activation='softmax')  # Output layer (10 classes for MNIST digits)
+])
+
+# Step 4: Model Compilation
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',  # Categorical cross-entropy loss for multi-class classification
+              metrics=['accuracy'])
+
+# Step 5: Model Training
+model.fit(X_train, y_train, epochs=10, batch_size=32, validation_data=(X_val, y_val))
+
+# Step 6: Model Evaluation (on the test dataset)
+test_loss, test_accuracy = model.evaluate(X_test, y_test)
+print(f'Test accuracy: {test_accuracy}')
+from sklearn.model_selection import train_test_split
+
+X,y = df[[key for key in info.keys() if key!='TWOMORROW RAIN']],df['TWOMORROW RAIN']
+xtrain,xtest, ytrain,ytest = train_test_split(X,y,shuffle = True, test_size = 0.25,random_state = 101)
+ from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+xtrain = scaler.fit_transform(xtrain)
+xtest = scaler.transform(xtest)
+
+ from sklearn.ensemble import RandomForestClassifier
+rfc = RandomForestClassifier(n_estimators = 100, max_depth = 17,criterion = 'gini')
+rfc.fit(xtrain,ytrain)
+ from sklearn.metrics import accuracy_score
+
+ypred_rfc = rfc.predict(xtest)
+ypred_t_rfc = rfc.predict(xtrain)
+
+print('Test set accuracy is RandomForestClassifier:',accuracy_score(ytest,ypred_rfc))
+print('Train set accuracy is RandomForestClassifier:',accuracy_score(ytrain,ypred_t_rfc))
